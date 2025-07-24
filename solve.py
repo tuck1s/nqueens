@@ -27,11 +27,11 @@ board = [
     [Color.BROWN, Color.GREY, Color.ORANGE, Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE]
 ]
 
-# Pass in the board, and the available sets of columns, and colors
+# Pass in the board
+# Returns a list of solutions, as sets of tuples (x, y) representing the positions of the queens
+#
 # The linkedin version of this game requires that no two queens are diagonally adjacent
 # UNLIKE real chess, diagonals more than one square apart are allowed
-#
-# Returns a list of solutions, as sets of tuples (x, y) representing the positions of the queens
 def solve(board: list[list[Color]]) -> list[set[tuple[int, int]]]:
     size = len(board)
     all_solutions = []
@@ -42,7 +42,7 @@ def solve(board: list[list[Color]]) -> list[set[tuple[int, int]]]:
     def solve_from(y: int, used_columns: set[int], used_colors: set[int], queens: list[tuple[int, int]]):
         if y == size:
             print_board(board, queens)
-            all_solutions.append(tuple(queens))
+            all_solutions.append(queens)
             return
 
         for x in range(size):
@@ -76,3 +76,4 @@ def print_board(board, queens):
 if __name__ == "__main__":
     solutions = solve(board)
     print(f"Total solutions found: {len(solutions)}")
+    
