@@ -30,28 +30,27 @@ board = [
 # Pass in the board, and the available sets of columns, and colors
 # The linkedin version of this game requires that no two queens are diagonally adjacent
 # UNLIKE real chess, diagonals more than one square apart are allowed
-def solve(board):
+#
+# Returns a list of solutions, as sets of tuples (x, y) representing the positions of the queens
+def solve(board: list[list[Color]]) -> list[set[tuple[int, int]]]:
     size = len(board)
     all_solutions = []
 
-    def is_diagonally_adjacent(x, y, queens) -> bool:
-        for qx, qy in queens:
-            if abs(qx - x) == 1 and abs(qy - y) == 1:
-                return True
-        return False
+    def is_diagonally_adjacent(x: int, y: int, queens: set[tuple[int, int]]) -> bool:
+        return any(abs(qx - x) == 1 and abs(qy - y) == 1 for qx, qy in queens)
 
-    def solve_from(y, used_columns: set[int], used_colors: set[int], queens: set[tuple[int, int]]):
+    def solve_from(y: int, used_columns: set[int], used_colors: set[int], queens: list[tuple[int, int]]):
         if y == size:
             print_board(board, queens)
-            all_solutions.append(queens.copy())
+            all_solutions.append(tuple(queens))
             return
 
         for x in range(size):
             color = board[y][x].value
-            if not(x in used_columns or color in used_colors or is_diagonally_adjacent(x, y, queens)):
-                solve_from(y + 1, used_columns | {x}, used_colors | {color}, queens | {(x, y)})
+            if x not in used_columns and color not in used_colors and not is_diagonally_adjacent(x, y, queens):
+                solve_from(y + 1, used_columns | {x}, used_colors | {color}, queens + [(x, y)])
 
-    solve_from(0, set(), set(), set())
+    solve_from(0, set(), set(), [])
     return all_solutions
 
 
