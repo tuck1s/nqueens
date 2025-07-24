@@ -28,15 +28,15 @@ board = [
 ]
 
 # Pass in the board
-# Returns a list of solutions, as sets of tuples (x, y) representing the positions of the queens
+# Returns a list of solutions, as lists of tuples (x, y) representing the positions of the queens
 #
 # The linkedin version of this game requires that no two queens are diagonally adjacent
 # UNLIKE real chess, diagonals more than one square apart are allowed
-def solve(board: list[list[Color]]) -> list[set[tuple[int, int]]]:
+def solve(board: list[list[Color]]) -> list[list[tuple[int, int]]]:
     size = len(board)
     all_solutions = []
 
-    def is_diagonally_adjacent(x: int, y: int, queens: set[tuple[int, int]]) -> bool:
+    def is_diagonally_adjacent(x: int, y: int, queens: list[tuple[int, int]]) -> bool:
         return any(abs(qx - x) == 1 and abs(qy - y) == 1 for qx, qy in queens)
 
     def solve_from(y: int, used_columns: set[int], used_colors: set[int], queens: list[tuple[int, int]]):
@@ -76,4 +76,3 @@ def print_board(board, queens):
 if __name__ == "__main__":
     solutions = solve(board)
     print(f"Total solutions found: {len(solutions)}")
-    
