@@ -3,13 +3,13 @@ from enum import Enum
 from ordered_set import OrderedSet
 
 class Color(int, Enum):
-    GREY   = (0, "#C0C0C0")
+    GREY   = (0, "#E0E0E0")
     GREEN  = (1, "#95c556")
     BLUE   = (2, "#7C97DF")
     YELLOW = (3, "#EBEBB4")
-    BROWN  = (4, "#EFA3A3")
+    BROWN  = (4, "#8E7878")
     RED    = (5, "#EE5252")
-    ORANGE = (6, "#F5BC53")
+    ORANGE = (6, "#EDC16E")
 
     def __new__(cls, value, color):
         obj = int.__new__(cls, value)
@@ -17,7 +17,7 @@ class Color(int, Enum):
         obj.color = color
         return obj
 
-# Community Game https://queensgame.vercel.app/community-level/158
+# Community Game 
 board = [
     [Color.GREY, Color.GREEN, Color.BLUE, Color.YELLOW, Color.BROWN, Color.RED, Color.ORANGE],
     [Color.BLUE, Color.RED, Color.GREY, Color.ORANGE, Color.GREEN, Color.YELLOW, Color.BROWN],
