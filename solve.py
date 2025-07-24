@@ -1,4 +1,6 @@
+#!/usr/bin/env python3
 from enum import Enum
+from ordered_set import OrderedSet
 
 class Color(int, Enum):
     GREY   = (0, "#C0C0C0")
@@ -15,7 +17,7 @@ class Color(int, Enum):
         obj.color = color
         return obj
 
-# Community Game 
+# Community Game
 board = [
     [Color.GREY, Color.GREEN, Color.BLUE, Color.YELLOW, Color.BROWN, Color.RED, Color.ORANGE],
     [Color.BLUE, Color.RED, Color.GREY, Color.ORANGE, Color.GREEN, Color.YELLOW, Color.BROWN],
@@ -28,46 +30,45 @@ board = [
 
 
 # Pass in the board, and the available sets of rows, columns, and colors
-def solve(board, row_sets, column_sets, color_sets) -> set:
+def solve(board, column_sets, color_sets) -> set:
 
     def place_queen(x, y):
         queens.add((x, y))
-        row_sets.remove(y)
         column_sets.remove(x)
         color_sets.remove(board[y][x].value)
 
     def remove_queen(x, y):
         queens.remove((x, y))
-        row_sets.add(y)
         column_sets.add(x)
         color_sets.add(board[y][x].value)
 
     # The linkedin version of this game requires that no two queens are diagonally adjacent
     # Diagonals more than one square apart are allowed
-    def is_diagonally_adjacent(x, y, queens):
+    def is_diagonally_adjacent(x, y, queens) -> bool:
         for qx, qy in queens:
             if abs(qx - x) == 1 and abs(qy - y) == 1:
                 return True
         return False
 
-    def solve_from(board, row_sets, column_sets, color_sets, queens) -> set:
+    def solve_from(board, y, column_sets, color_sets, queens):
         if len(queens) == vsize:
             print_board(board, queens) # Print the board when a solution is found
             return queens
-        
-        for y in row_sets:
-            for x in column_sets:
-                color = board[y][x].value
-                if color in color_sets and not is_diagonally_adjacent(x, y, queens):
-                    place_queen(x, y)
-                    solved = solve_from(board, row_sets, column_sets, color_sets, queens)
-                    # Keep looking for more solutions
-                    remove_queen(x, y)
+
+        for x in list(column_sets):
+            color = board[y][x].value
+            if color in color_sets and not is_diagonally_adjacent(x, y, queens):
+                place_queen(x, y)
+                solve_from(board, y+1, column_sets, color_sets, queens)
+                # Keep looking for more solutions
+                remove_queen(x, y)
         return set() # no solution found
 
     queens = set()
-    solutions = set()
-    return solve_from(board, row_sets, column_sets, color_sets, queens)
+    for x in list(column_sets):
+        place_queen(x, 0) # Can always place a queen in the first row
+        solve_from(board, 1, column_sets, color_sets, queens)
+        remove_queen(x, 0)
 
 
 def hex_to_rgb(hex_color):
@@ -93,8 +94,7 @@ vsize = len(board)
 assert all(vsize == len(row) for row in board)
 
 # create row, column and color sets of available positions
-row_sets = set(range(vsize))
-column_sets = set(range(vsize))
-color_sets = set(range(len(Color)))
+column_sets = OrderedSet(range(vsize))
+color_sets = OrderedSet(range(len(Color)))
 
-queens = solve(board, row_sets, column_sets, color_sets)
+queens = solve(board, column_sets, color_sets)
