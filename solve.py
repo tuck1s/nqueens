@@ -53,7 +53,6 @@ def solve(board, column_sets, color_sets) -> set:
     def solve_from(board, y, column_sets, color_sets, queens):
         if len(queens) == vsize:
             print_board(board, queens) # Print the board when a solution is found
-            return queens
 
         for x in list(column_sets):
             color = board[y][x].value
@@ -65,10 +64,7 @@ def solve(board, column_sets, color_sets) -> set:
         return set() # no solution found
 
     queens = set()
-    for x in list(column_sets):
-        place_queen(x, 0) # Can always place a queen in the first row
-        solve_from(board, 1, column_sets, color_sets, queens)
-        remove_queen(x, 0)
+    solve_from(board, 0, column_sets, color_sets, queens)
 
 
 def hex_to_rgb(hex_color):
