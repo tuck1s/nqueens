@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from enum import Enum
-from ordered_set import OrderedSet
 
 class Color(int, Enum):
     GREY   = (0, "#E0E0E0")
@@ -28,10 +27,9 @@ board = [
     [Color.BROWN, Color.GREY, Color.ORANGE, Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE]
 ]
 
-
 # Pass in the board, and the available sets of columns, and colors
 # The linkedin version of this game requires that no two queens are diagonally adjacent
-# Diagonals more than one square apart are allowed
+# UNLIKE real chess, diagonals more than one square apart are allowed
 def solve(board):
     size = len(board)
     all_solutions = []
@@ -50,17 +48,8 @@ def solve(board):
 
         for x in range(size):
             color = board[y][x].value
-            if x in used_columns or color in used_colors:
-                continue
-            if is_diagonally_adjacent(x, y, queens):
-                continue
-
-            solve_from(
-                y + 1,
-                used_columns | {x},
-                used_colors | {color},
-                queens | {(x, y)}
-            )
+            if not(x in used_columns or color in used_colors or is_diagonally_adjacent(x, y, queens)):
+                solve_from(y + 1, used_columns | {x}, used_colors | {color}, queens | {(x, y)})
 
     solve_from(0, set(), set(), set())
     return all_solutions
@@ -85,4 +74,5 @@ def print_board(board, queens):
     print()
 
 
-solutions = solve(board)
+if __name__ == "__main__":
+    solutions = solve(board)
