@@ -76,3 +76,4 @@ def print_board(board, queens):
 
 if __name__ == "__main__":
     solutions = solve(board)
+    print(f"Total solutions found: {len(solutions)}")
