@@ -17,7 +17,7 @@ class Color(int, Enum):
         obj.color = color
         return obj
 
-# Community Game
+# Community Game https://queensgame.vercel.app/community-level/158
 board = [
     [Color.GREY, Color.GREEN, Color.BLUE, Color.YELLOW, Color.BROWN, Color.RED, Color.ORANGE],
     [Color.BLUE, Color.RED, Color.GREY, Color.ORANGE, Color.GREEN, Color.YELLOW, Color.BROWN],
